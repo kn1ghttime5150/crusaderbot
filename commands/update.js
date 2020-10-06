@@ -3,10 +3,10 @@ const { OWNERS } = require("../config.json");
 
 module.exports = {
   name: "update",
-  description: "Update Recall using git.",
+  description: "Update CrusaderBot using git.",
   owner: true,
   async execute(message, args) {
-    console.log("[Recall : Update] Command has been run.");
+    console.log("[CrusaderBot : Update] Command has been run.");
 
     let owners;
     let msg = message
@@ -19,7 +19,7 @@ module.exports = {
     message.channel.send(`**Updating...**`).then(mxg => {
       exec('git pull', {}, (e, o, se) => {
         if(e) {
-          console.error("[Recall : Update] " + e);
+          console.error("[CrusaderBot : Update] " + e);
           return mxg.edit(`Some error occured. Try again later.`);
         }
         mxg.edit('**Update completed.**');
