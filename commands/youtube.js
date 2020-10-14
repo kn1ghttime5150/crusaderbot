@@ -1,76 +1,104 @@
-const fetch = require("node-fetch");
-const { MessageEmbed } = require("discord.js");
+const { YOUTUBE_API_KEY} = require("../config.json");
+const ytdl = require("ytdl-core");
+const YouTubeAPI = require("simple-youtube-api");
+const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
+
 module.exports = {
   name: "youtube",
-  description: "Searches for YouTube videos",
-  aliases: ["video", "yt"],
-  usage: "[query]",
-  args: true,
-  execute(message, args) {
-    async function AsyncFunc(message, args) {
-      const search = await fetch(
-        `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
-          args.slice(0).join(" ")
-        )}&order=relevance&type=video&key=${process.env.GOOGLE_KEY}`
-      ).then((response) => response.json());
+  cooldown: 3,
+  aliases: ["p", "yt"],
+  description: "Plays audio from YouTube",
+  async execute(message, args) {
+    const { channel } = message.member.voice;
 
-      if (search.error.message) {
-        const Embed = new MessageEmbed()
-          .setTitle(`Error ${search.error.code}!`)
-          .setDescription(`\`${search.error.message}\``)
-          .setColor(0xff0000);
-        console.log(`${search.error.code}:\n${search.error.message}`);
-        return message.channel.send(Embed);
-      }
+    const serverQueue = message.client.queue.get(message.guild.id);
+    if (!channel) return message.reply("You need to join a voice channel first!").catch(console.error);
+    if (serverQueue && channel !== message.guild.me.voice.channel)
+      return message.reply(`You must be in the same channel as ${message.client.user}`).catch(console.error);
 
-      const Embed = new MessageEmbed()
-        .setTitle("Results")
-        .addFields(
-          {
-            name: "Author",
-            value: search.items.map((v) => v.snippet.channelTitle),
-            inline: true,
-          },
-          {
-            name: "Title",
-            value: search.items.map((v) => v.snippet.title),
-            inline: true,
-          }
-        )
-        .setFooter("Say the number that corresponds to a result to send it.");
-      message.channel.send(Embed).then((optionsMessage) => {
-        const messageAuthor = message.author;
-        function AwaitResponse() {
-          if (timeUp) {
-            return;
-          } else {
-            message.client.once("message", (message) => {
-              if (message.author != messageAuthor) return AwaitResponse();
+    if (!args.length)
+      return message
+        .reply(`Usage: ${message.client.prefix}play <YouTube URL | Video Name>`)
+        .catch(console.error);
 
-              const matches = message.content.match(/(\d+)/);
-              if (matches) {
-                if (matches[0] <= search.items.length) {
-                  message.channel
-                    .send(
-                      `https://www.youtube.com/watch?v=${
-                        search.items[matches[0] - 1].id.videoId
-                      }`
-                    )
-                    .then(() => {
-                      optionsMessage.delete();
-                    });
-                } else return AwaitResponse();
-              } else return AwaitResponse();
-            });
-          }
-        }
-        AwaitResponse();
-      });
+    const permissions = channel.permissionsFor(message.client.user);
+    if (!permissions.has("CONNECT"))
+      return message.reply("Cannot connect to voice channel, missing permissions");
+    if (!permissions.has("SPEAK"))
+      return message.reply("I cannot speak in this voice channel, make sure I have the proper permissions!");
+
+    const search = args.join(" ");
+    const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
+    const playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
+    const url = args[0];
+    const urlValid = videoPattern.test(args[0]);
+
+    // Start the playlist if playlist url was provided
+    if (!videoPattern.test(args[0]) && playlistPattern.test(args[0])) {
+      return message.client.commands.get("playlist").execute(message, args);
+    } else if (scdl.isValidUrl(url) && url.includes("/sets/")) {
+      return message.client.commands.get("playlist").execute(message, args);
     }
-    let timeUp = false;
-    setTimeout(function () {
-      timeUp = true;
-    }, 60000);
-    AsyncFunc(message, args);
-  },
+
+    const queueConstruct = {
+      textChannel: message.channel,
+      channel,
+      connection: null,
+      songs: [],
+      loop: false,
+      volume: 100,
+      playing: true
+    };
+
+    let songInfo = null;
+    let song = null;
+
+    if (urlValid) {
+      try {
+        songInfo = await ytdl.getInfo(url);
+        song = {
+          title: songInfo.videoDetails.title,
+          url: songInfo.videoDetails.video_url,
+          duration: songInfo.videoDetails.lengthSeconds
+        };
+      } catch (error) {
+        console.error(error);
+        return message.reply(error.message).catch(console.error);
+      }
+    } else {
+      try {
+        const results = await youtube.searchVideos(search, 1);
+        songInfo = await ytdl.getInfo(results[0].url);
+        song = {
+          title: songInfo.videoDetails.title,
+          url: songInfo.videoDetails.video_url,
+          duration: songInfo.videoDetails.lengthSeconds
+        };
+      } catch (error) {
+        console.error(error);
+        return message.reply("No video was found with a matching title").catch(console.error);
+      }
+    }
+
+    if (serverQueue) {
+      serverQueue.songs.push(song);
+      return serverQueue.textChannel
+        .send(`✅ **${song.title}** has been added to the queue by ${message.author}`)
+        .catch(console.error);
+    }
+
+    queueConstruct.songs.push(song);
+    message.client.queue.set(message.guild.id, queueConstruct);
+
+    try {
+      queueConstruct.connection = await channel.join();
+      await queueConstruct.connection.voice.setSelfDeaf(true);
+      play(queueConstruct.songs[0], message);
+    } catch (error) {
+      console.error(error);
+      message.client.queue.delete(message.guild.id);
+      await channel.leave();
+      return message.channel.send(`Could not join the channel: ${error}`).catch(console.error);
+    }
+  }
 };
