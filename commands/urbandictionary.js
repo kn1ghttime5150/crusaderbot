@@ -19,7 +19,7 @@ module.exports = {
         }
         console.log(list[0])
         var embed = new Discord.MessageEmbed()
-          .setTitle('UD Definition')
+          .setTitle(list[0].word)
           .setColor('#ffcc00')
           .setDescription(list[0].definition)
           .setAuthor(list[0].author)
