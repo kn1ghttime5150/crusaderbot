@@ -3,7 +3,9 @@ module.exports = {
     aliases: ['icon', 'pfp'],
     description: 'displays the avatars of the mentioned user(s)',
     execute(message, args) {
-        message.channel.send(message.author.avatarURL())
+        var member = message.mentions.members.first()
+        console.log(member)
+        message.channel.send(member.user.avatarURL())
 
     },
 };

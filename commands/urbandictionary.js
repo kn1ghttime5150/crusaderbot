@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+var Discord = require('discord.js')
 const querystring = require('querystring');
 module.exports = {
     name: 'urbandictionary',
@@ -13,8 +14,16 @@ module.exports = {
         
           const { list } = await fetch(`https://api.urbandictionary.com/v0/define?${query}`).then(response => response.json());
         if (!list.length) {
+          
             return message.channel.send(`No results found for **${args.join(' ')}**.`);
         }
-        message.channel.send(list[0].definition);
+        console.log(list[0])
+        var embed = new Discord.MessageEmbed()
+          .setTitle('UD Definition')
+          .setColor('#ffcc00')
+          .setDescription(list[0].definition)
+          .setAuthor(list[0].author)
+          .addField('Example', list[0].example)
+        message.channel.send(embed)
     },
 };

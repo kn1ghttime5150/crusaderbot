@@ -15,9 +15,11 @@ for (const file of commandFiles) {
 const cooldowns = new Discord.Collection();
 
 client.once('ready', () => {
-	console.log('Ready!');
+	console.log(`Logged in as ${client.user.tag}`);
 });
-
+client.on('debug', (e) => {
+    console.log(e)
+})
 client.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
