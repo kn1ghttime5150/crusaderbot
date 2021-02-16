@@ -1,4 +1,4 @@
-const { YOUTUBE_API_KEY} = require("../config.json");
+/*const { YOUTUBE_API_KEY} = require("../config.json");
 const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
@@ -29,7 +29,7 @@ module.exports = {
 
     const search = args.join(" ");
     const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
-    const playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
+    const playlistPattern = /^.*(list=)([^#\&\?]*).gi;
     const url = args[0];
     const urlValid = videoPattern.test(args[0]);
 
@@ -99,4 +99,4 @@ module.exports = {
       return message.channel.send(`Could not join the channel: ${error}`).catch(console.error);
     }
   }
-};
+};*/

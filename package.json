@@ -14,7 +14,6 @@
     "discord.js": "^12.5.1",
     "fs": "0.0.1-security",
     "node-fetch": "^2.6.1",
-    "simple-youtube-api": "^5.2.1",
-    "ytdl-core": "^4.4.5"
+    "simple-youtube-api": "^5.2.1"
   }
 }
