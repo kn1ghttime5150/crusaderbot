@@ -20,6 +20,9 @@ client.once('ready', () => {
 client.on('debug', (e) => {
     console.log(e)
 })
+client.on('guildMemberAdd', (guild, member) => {
+    member.roles.add(guild.roles.cache.get('637676787383533588')
+    )})
 client.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
