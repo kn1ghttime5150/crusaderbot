@@ -1,5 +1,5 @@
 const exec = require('child_process').exec
-const { OWNERS } = require("../config.json");
+const { OWNERS } = require("dotenv").config();
 
 module.exports = {
   name: "update",
