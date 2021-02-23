@@ -5,3 +5,10 @@ module.exports = {
         message.channel.send(`Server Name: ${message.guild.name}\nTotal Members: ${message.guild.memberCount}\nDate Created: ${message.guild.createdAt}\nServer Region: ${message.guild.region}`);
     },
 };
+
+// ╭─────────────────────────────────────────────────────────────────╮
+// │                                                                 │
+// │                    Written by Kn1ghtTime                        │
+// │                   Property of CrusaderBot                       │
+// │                                                                 │
+// ╰─────────────────────────────────────────────────────────────────╯

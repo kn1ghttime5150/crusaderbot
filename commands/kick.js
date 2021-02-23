@@ -11,3 +11,10 @@ module.exports = {
         message.channel.send(`You wanted to kick: ${taggedUser.username}`);
     },
 };
+
+// ╭─────────────────────────────────────────────────────────────────╮
+// │                                                                 │
+// │                    Written by Kn1ghtTime                        │
+// │                   Property of CrusaderBot                       │
+// │                                                                 │
+// ╰─────────────────────────────────────────────────────────────────╯
