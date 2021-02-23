@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "CrusaderBot is a Multifuctional Discord Bot that would be more than happy to accommpany you on your conquests.",
   "main": "index.js",
+  "repository": "https://fuckyou.com",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
@@ -14,6 +15,7 @@
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "fs": "0.0.1-security",
+    "mongoose": "^5.11.17",
     "node-fetch": "^2.6.1",
     "simple-youtube-api": "^5.2.1",
     "ytdl-core": "^4.5.0"

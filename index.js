@@ -1,5 +1,6 @@
 const fs = require('fs');
 const Discord = require('discord.js');
+const mongoose = require('mongoose');
 require("dotenv").config()
 
 const client = new Discord.Client();
@@ -15,7 +16,13 @@ for (const file of commandFiles) {
 const cooldowns = new Discord.Collection();
 
 client.once('ready', () => {
-	console.log(`Logged in as ${client.user.tag}`);
+    console.log(`Logged in as ${client.user.tag}`);
+    mongoose.connect(process.env.MONGO, {useNewUrlParser: true, useUnifiedTopology: true});
+    let db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', function() {
+        console.log("Connected to Database!")
+    });
 });
 client.on('debug', (e) => {
     console.log(e)

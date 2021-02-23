@@ -1,7 +1,7 @@
-/*const { YOUTUBE_API_KEY} = require("dotenv").config();
+require("dotenv").config();
 const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
-const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
+const youtube = new YouTubeAPI(process.env.YOUTUBE_API_KEY);
 
 module.exports = {
   name: "youtube",
@@ -18,7 +18,7 @@ module.exports = {
 
     if (!args.length)
       return message
-        .reply(`Usage: ${message.client.prefix}play <YouTube URL | Video Name>`)
+        .reply(`Usage: ${message.client.process.env.PREFIX}play <YouTube URL | Video Name>`)
         .catch(console.error);
 
     const permissions = channel.permissionsFor(message.client.user);
@@ -29,7 +29,7 @@ module.exports = {
 
     const search = args.join(" ");
     const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
-    const playlistPattern = /^.*(list=)([^#\&\?]*).gi;
+    const playlistPattern = /^.*(list=)([^#\&\?]*)*/.gi;
     const url = args[0];
     const urlValid = videoPattern.test(args[0]);
 
@@ -99,4 +99,4 @@ module.exports = {
       return message.channel.send(`Could not join the channel: ${error}`).catch(console.error);
     }
   }
-};*/
+};
