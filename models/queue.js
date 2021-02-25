@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require("@influxdata/influxdb-client");
 module.exports = model(
     "Queue",
     new Schema(

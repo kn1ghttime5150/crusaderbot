@@ -1,6 +1,6 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const mongoose = require('mongoose');
+const {InfluxDB} = require('@influxdata/influxdb-client')
 require("dotenv").config()
 
 const client = new Discord.Client();
@@ -17,13 +17,14 @@ const cooldowns = new Discord.Collection();
 
 client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
-    mongoose.connect(process.env.MONGO, {useNewUrlParser: true, useUnifiedTopology: true});
-    let db = mongoose.connection;
-    db.on('error', console.error.bind(console, 'connection error:'));
-    db.once('open', function() {
+    const token = process.env.INFLUX
+    const org = 'konr5150@gmail.com'
+    const bucket = 'konr5150\'s Bucket'
+
+    const client = new InfluxDB({url: 'https://eastus-1.azure.cloud2.influxdata.com', token: token})
         console.log("Connected to Database!")
-    });
 });
+
 client.on('debug', (e) => {
     console.log(e)
 })
