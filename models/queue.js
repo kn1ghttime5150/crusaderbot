@@ -1,4 +1,4 @@
-const { Schema, model } = require("@influxdata/influxdb-client");
+/*const { Schema, model } = require("@influxdata/influxdb-client");
 module.exports = model(
     "Queue",
     new Schema(
@@ -11,7 +11,7 @@ module.exports = model(
         }
     )
 )
-
+*/
 // ╭─────────────────────────────────────────────────────────────────╮
 // │                                                                 │
 // │                    Written by Kn1ghtTime                        │

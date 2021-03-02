@@ -1,4 +1,4 @@
-require("dotenv").config();
+/*require("dotenv").config();
 const queueSchema = require("../models/queue")
 const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
@@ -16,7 +16,7 @@ module.exports = {
             /*songlist: {
                 type: Map,
                 of: String
-            }*/
+            }
         }
     )
     newqueue.save()
@@ -26,7 +26,7 @@ module.exports = {
     })
   }
 }
-
+*/
 // ╭─────────────────────────────────────────────────────────────────╮
 // │                                                                 │
 // │                    Written by Kn1ghtTime                        │
