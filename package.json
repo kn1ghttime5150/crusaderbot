@@ -1,15 +1,15 @@
 {
   "name": "crusaderbot",
   "version": "1.0.0",
-  "description": "CrusaderBot is a Multifuctional Discord Bot that would be more than happy to accommpany you on your conquests.",
+  "description": "crusaderbot is a Multifuctional Discord Bot that would be more than happy to accommpany you on your conquests.",
   "main": "index.js",
-  "repository": "https://fuckyou.com",
+  "repository": "https://github.com/kn1ghttime5150/crusaderbot",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
   "keywords": [],
-  "author": "Konrad Boyer",
+  "author": "Kn1ghtTime",
   "license": "ISC",
   "dependencies": {
     "@influxdata/influxdb-client": "^1.10.0",
